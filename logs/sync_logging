@@ -1,0 +1,18 @@
+------------------------------ Starting synchronization ------------------------------
+/home/tamro/Desktop/SOURCE/top_file1.txt copied to: /home/tamro/Desktop/REPLICA/./top_file1.txt
+------------------------------- Ending synchronization -------------------------------
+
+
+------------------------------ Starting synchronization ------------------------------
+/home/tamro/Desktop/SOURCE/fold1 copied to replica folder: /home/tamro/Desktop/REPLICA/fold1
+/home/tamro/Desktop/SOURCE/fold1/file1.txt copied to: /home/tamro/Desktop/REPLICA/fold1/file1.txt
+/home/tamro/Desktop/SOURCE/fold1/file2.txt copied to: /home/tamro/Desktop/REPLICA/fold1/file2.txt
+------------------------------- Ending synchronization -------------------------------
+
+
+------------------------------ Starting synchronization ------------------------------
+/home/tamro/Desktop/SOURCE/fol2 copied to replica folder: /home/tamro/Desktop/REPLICA/fol2
+Deleted extra directory: /home/tamro/Desktop/REPLICA/xdf
+------------------------------- Ending synchronization -------------------------------
+
+
