@@ -19,12 +19,12 @@ def sync_folders(source_path, replica_path, log):
         message = f"{'-'*30} Starting synchronization {'-'*30}"
         print(message)
         log.write(message+"\n")
-        log.flush()  # Ensure real-time logging
+        log.flush()  # real-time logging
 
-        ### First we check if the replica dir exists, if not, we create it
+        ### First we check if the replica directory exists, if not, we create it
         if not os.path.exists(replica_path):
             os.makedirs(replica_path)
-            message = f"Replica directory doesn't exist at: {replica_path} so we are creating it."
+            message = f"Replica directory does not exist at: {replica_path} so we are creating it."
             print(message)
             log.write(message+"\n")
             log.flush()
@@ -39,7 +39,7 @@ def sync_folders(source_path, replica_path, log):
             replica_dir = os.path.join(replica_path, source_relative_path)
             if not os.path.exists(replica_dir):
                 os.makedirs(replica_dir)
-                message = f"{root} copied to replica folder: {replica_dir}"
+                message = f"{root} copied to replica folder: {replica_dir}."
                 print(message)
                 log.write(message+ "\n")
                 log.flush()
@@ -50,7 +50,7 @@ def sync_folders(source_path, replica_path, log):
                 replica_file = os.path.join(replica_dir, file)
                 # Only updating if a file is missing or modified
                 if not os.path.exists(replica_file) or file_hash(source_file) != file_hash(replica_file):
-                    message = f"{source_file} copied to: {replica_file}"
+                    message = f"{source_file} copied to: {replica_file}."
                     shutil.copy2(src=source_file, dst=replica_file)
                     print(message)
                     log.write(message+"\n")
@@ -69,7 +69,7 @@ def sync_folders(source_path, replica_path, log):
                 
                 if not os.path.exists(source_subdir):
                     shutil.rmtree(replica_subdir)
-                    message = f"Deleted extra directory: {replica_subdir}"
+                    message = f"Deleted extra directory: {replica_subdir}."
                     print(message)
                     log.write(message+"\n")
                     log.flush()
@@ -82,7 +82,7 @@ def sync_folders(source_path, replica_path, log):
                 
                 if not os.path.exists(source_file):
                     os.remove(replica_file)
-                    message = f"Deleted extra file: {replica_file}"
+                    message = f"Deleted extra file: {replica_file}."
                     print(message)
                     log.write(message+"\n")
                     log.flush()
@@ -98,7 +98,7 @@ def sync_folders(source_path, replica_path, log):
 
 def schedule_sync(sc, source_path, replica_path, log_file, interval):
     sync_folders(source_path, replica_path, log_file)
-    # Reschedule synchronization every interval seconds
+    # Reschedule synchronization every given <interval> seconds
     sc.enter(interval, 1, schedule_sync, (sc, source_path, replica_path, log_file, interval))
 
 
@@ -108,8 +108,8 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Synchronize two folders")
     parser.add_argument("--source_path", type=str, help="Path to the source folder")
     parser.add_argument("--replica_path", type=str, help="Path to the replica folder")
-    parser.add_argument("--interval", type=int, default=10, help="Sync interval in seconds (default: 10)")
-    parser.add_argument("--log_file", type=str, default="./logs/sync_logging", help="Path to the log file")
+    parser.add_argument("--interval", type=int, default=60, help="Sync interval in seconds (default: 60)")
+    parser.add_argument("--log_file", type=str, default="./logs/sync_log", help="Path to the log file")
 
     args = parser.parse_args()
 
@@ -123,8 +123,5 @@ if __name__=="__main__":
             scheduler = sched.scheduler(time.time, time.sleep)
             scheduler.enter(interval, 1, schedule_sync, (scheduler, source_path, replica_path, log_file, interval))
             scheduler.run()
-            # sync_folders(source_path, replica_path, log_file_path)
     else:
         print(f'Source folder "{source_path}" does not exist. Please, provide a valid path.')
- 
-
