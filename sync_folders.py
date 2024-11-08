@@ -2,6 +2,9 @@ import argparse
 import os
 import shutil
 import logging
+import sched
+import time
+
 
 def sync_folders(source_path, replica_path):
     
@@ -56,7 +59,10 @@ def sync_folders(source_path, replica_path):
                 print(f"** Deleted extra file: {replica_file}")
 
 
-
+def schedule_sync(sc, source_path, replica_path, interval):
+    sync_folders(source_path, replica_path)
+    # Reschedule synchronization every interval seconds
+    sc.enter(interval, 1, schedule_sync, (sc, source_path, replica_path, interval))
 
 
 
@@ -65,11 +71,17 @@ if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Synchronize two folders")
     parser.add_argument("--source_path", type=str, help="Path to the source folder")
     parser.add_argument("--replica_path", type=str, help="Path to the replica folder")
-    parser.add_argument("--interval", type=int, default=300, help="Sync interval in seconds (default: 300)")
+    parser.add_argument("--interval", type=int, default=10, help="Sync interval in seconds (default: 10)")
     parser.add_argument("--log_file", type=str, default="./logs/sync_logging", help="Path to the log file")
 
     args = parser.parse_args()
 
     source_path = args.source_path
     replica_path = args.replica_path
-    sync_folders(source_path, replica_path)
+    interval = int(args.interval)
+    log_file_path = args.log_file
+
+    scheduler = sched.scheduler(time.time, time.sleep)
+    scheduler.enter(interval, 1, schedule_sync, (scheduler, source_path, replica_path, interval))
+    scheduler.run()
+
